@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+	<meta charset="utf-8">
+	<title>Gallery2</title>
+	<style type="text/css">
+		html, body { margin: 0 ; padding: 0;}
+		.gallery {margin: 50px 0 0 150px;}
+		.thm-list {position: relative;width: 300px;height: 300px;margin: 0;padding: 0;overflow: hidden;}
+		.thm-list li {position: absolute;top: 0;width: 300px;height: 300px;list-style: none;}
+		.thm-item1 {background-color: red;}
+		.thm-item2 {background-color: orange;}
+		.thm-item3 {background-color: yellow;}
+		.thm-item4 {background-color: green;}
+		.thm-item5 {background-color: blue;}
+	</style>
+</head>
+<body>
+	<div id="gallery01" class="gallery js_item_wrap">
+		<ul class="thm-list">
+			<li class="thm-item1 js_item"></li>
+			<li class="thm-item2 js_item"></li>
+			<li class="thm-item3 js_item"></li>
+			<li class="thm-item4 js_item"></li>
+			<li class="thm-item5 js_item"></li>
+		</ul>
+		<button type="button" class="btn-prev js_btn_prev">PREV</button>
+		<button type="button" class="btn-next js_btn_next">NEXT</button>
+	</div>
+    	<div id="gallery02" class="gallery js_item_wrap">
+    		<ul class="thm-list">
+    			<li class="thm-item1 js_item"></li>
+    			<li class="thm-item2 js_item"></li>
+    			<li class="thm-item3 js_item"></li>
+    			<li class="thm-item4 js_item"></li>
+    			<li class="thm-item5 js_item"></li>
+    		</ul>
+    		<button type="button" class="btn-prev js_btn_prev">PREV</button>
+    		<button type="button" class="btn-next js_btn_next">NEXT</button>
+    	</div>
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/common2.js"></script>
+</body>
+</html>

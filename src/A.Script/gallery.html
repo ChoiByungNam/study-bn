@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+	<meta charset="UTF-8">
+	<title>CHOIBYUNGNAM</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	<!--#include file="/A.Script/_include/header.html" -->
+
+	<div id="gallery" class="gallery js_item_wrap"> <!-- gallery -->
+		<ul class="thum_list">
+			<li class="thum_item js_item">item 1</li>
+			<li class="thum_item2 js_item">item 2</li>
+			<li class="thum_item3 js_item">item 3</li>
+			<li class="thum_item4 js_item">item 4</li>
+			<li class="thum_item5 js_item">item 5</li>
+		</ul>
+
+		<button type="button" class="button_prev js_button_prev">Prev</button>
+		<button type="button" class="button_next js_button_next">Next</button>
+	</div> <!-- //gallery -->
+
+	<div id="slideBanner"> <!-- slideBanner -->
+		<div class="slide_wrap">
+			<span class="slide_move-left">L</span>
+			<span class="slide_move-right">R</span>
+
+			<div class="slide">
+				<div class="slide__block">
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+					<a href="#" class="slide__item"><img src="http://placehold.it/187x60" alt="상품이미지"></a>
+				</div>
+			</div>
+		</div>
+
+		<div class="slide_utill">
+			<button type="button" class="button_slide_left">Left</button>
+			<button type="button" class="button_slide_right">Right</button>
+			<button type="button" class="button_slide_pause">Pause</button>
+			<button type="button" class="button_slide_move">Move</button>
+		</div>
+	</div> <!-- //slideBanner -->
+
+	<!--#include file="/A.Script/_include/footer.html" -->
+	<a href="#" id="toTheTop" class="to-the-top">TOP</a>
+	<script src="js/script.js"></script>
+</body>
+</html>
