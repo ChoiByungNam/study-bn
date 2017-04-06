@@ -4,5 +4,5 @@
 (function () {
 	'use strict';
 
-	console.log('script.js');
+	// console.log('script.js');
 }());
