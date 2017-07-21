@@ -218,7 +218,7 @@
 				const { width, height } = canvas;
 				original = ctx.getImageData(0,0, width, height);
 
-				ctx.putImageData(grafi.blur(original, {level: 1}), 0, 0);
+				ctx.putImageData(grafi.blur(original), 0, 0);
 			}
 
 			function sharp () {
