@@ -24,7 +24,7 @@
 		</style>
 	</head>
 	<body>
-		<canvas id="grafi-canvas" class="playground">이 웹 브라우저가 &lt;canvas&gt;를 지원하지 않습니다.</canvas>
+		<canvas class="playground">이 웹 브라우저가 &lt;canvas&gt;를 지원하지 않습니다.</canvas>
 		<div class="toolbar">
 			<button type="button" data-action="invert">invert</button>
 			<button type="button" data-action="bright">bright</button>
@@ -40,7 +40,6 @@
 		</div>
 
 		<script type="text/javascript" src="js/grafi.js"></script>
-		<!-- <script type="text/javascript" src="js/script.js"></script> -->
 		<script type="text/javascript">
 			const canvas = document.querySelector('.playground');
 			const ctx = canvas.getContext('2d');
