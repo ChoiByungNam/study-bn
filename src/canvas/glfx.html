@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+	<head>
+		<meta charset="UTF-8">
+		<title>glfx</title>
+		<style>
+			.playground {
+				position: absolute;
+				z-index: 1;
+				top: 0;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+		</style>
+	</head>
+	<body>
+		<canvas class="playground">이 웹 브라우저가 &lt;canvas&gt;를 지원하지 않습니다.</canvas>
+
+		<script type="text/javascript" src="js/glfx.js"></script>
+		<script type="text/javascript">
+			const canvas = document.querySelector('.playground');
+			const ctx = canvas.getContext('2d');
+
+			let currentScale = 1;
+
+			// 캔버스 크기 지정
+			function setCanvasSize(canvas, width = window.innerWidth, height = window.innerHeight) {
+				canvas.width = width;
+				canvas.height = height;
+			}
+
+			// 뷰포트 크기 반환
+			function getViewportSize(excludeScrollbarSize = false) {
+				const docEl = document.documentElement;
+				const viewportSize = {};
+
+				if (excludeScrollbarSize) {
+					const docEl = document.documentElement;
+					viewportSize.width = docEl.clientWidth;
+					viewportSize.height = docEl.clientHeight;
+				} else {
+					viewportSize.width = window.innerWidth;
+					viewportSize.height = window.innerHeight;
+				}
+
+				return viewportSize;
+			}
+
+			// 화면에 맞추기
+			function fit(ctx, img) {
+				const { canvas } = ctx;
+				const viewport = getViewportSize();
+				const { naturalWidth, naturalHeight } = img;
+
+				let width = naturalWidth;
+				let height = naturalHeight;
+
+				if (naturalHeight > naturalWidth && naturalHeight > viewport.height) {
+					width = viewport.height * (naturalWidth / naturalHeight);
+					height = width * (naturalHeight / naturalWidth);
+					currentScale = viewport.height / naturalHeight;
+				} else if (naturalWidth > naturalHeight  && naturalWidth > viewport.width) {
+					height = viewport.width * (naturalHeight / naturalWidth);
+					width = height * (naturalWidth / naturalHeight);
+					currentScale = viewport.width / naturalWidth;
+				} else if (naturalWidth === naturalHeight) {
+					if (naturalWidth > viewport.width) {
+					currentScale = viewport.width / naturalWidth;
+					} else if (naturalHeight > viewport.height) {
+					currentScale = viewport.height / naturalHeight;
+					} else {
+					currentScale = 1;
+					}
+					width *= currentScale;
+					height *= currentScale;
+				}
+
+				setCanvasSize(canvas, width, height);
+				ctx.save();
+				ctx.drawImage(img, 0, 0, width, height);
+				ctx.restore();
+			}
+
+			// 이미지 생성
+			function makeImage(url) {
+				return new Promise((resolve, reject) => {
+					const img = document.createElement('img');
+
+					img.onload = () => {
+						img.onload = null;
+						img.onerror = null;
+						resolve(img);
+					};
+
+					img.onerror = () => {
+						img.onload = null;
+						img.onerror = null;
+						reject('이미지를 로드할 수 없습니다.');
+					};
+
+					img.alt = '';
+					img.src = url;
+				});
+			}
+
+			// 이미지 경로
+			const imageUrl = 'img/image.jpg';
+
+			const promisedImg = makeImage(imageUrl);
+			let img;
+
+			// 이미지가 로드되면 `fit()` 호출
+			promisedImg.then(el => {
+				img = el;
+				fit(ctx, img);
+			});
+
+			// glfx library
+
+		</script>
+	</body>
+</html>
