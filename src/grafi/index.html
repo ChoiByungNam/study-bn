@@ -53,23 +53,50 @@
 				canvas.height = height;
 			}
 
+			// 뷰포트 크기 반환
+			function getViewportSize(excludeScrollbarSize = false) {
+				const docEl = document.documentElement;
+				const viewportSize = {};
+
+				if (excludeScrollbarSize) {
+					const docEl = document.documentElement;
+					viewportSize.width = docEl.clientWidth;
+					viewportSize.height = docEl.clientHeight;
+				} else {
+					viewportSize.width = window.innerWidth;
+					viewportSize.height = window.innerHeight;
+				}
+
+				return viewportSize;
+			}
+
 			// 화면에 맞추기
 			function fit(ctx, img) {
 				const { canvas } = ctx;
-				const { innerWidth, innerHeight } = window;
+				const viewport = getViewportSize();
 				const { naturalWidth, naturalHeight } = img;
 
 				let width = naturalWidth;
 				let height = naturalHeight;
 
-				if (naturalHeight > naturalWidth && naturalHeight > innerHeight) {
-					width = innerHeight * (naturalWidth / naturalHeight);
+				if (naturalHeight > naturalWidth && naturalHeight > viewport.height) {
+					width = viewport.height * (naturalWidth / naturalHeight);
 					height = width * (naturalHeight / naturalWidth);
-					currentScale = innerHeight / naturalHeight;
-				} else if (naturalWidth > naturalHeight  && naturalWidth > innerWidth) {
-					height = innerWidth * (naturalHeight / naturalWidth);
+					currentScale = viewport.height / naturalHeight;
+				} else if (naturalWidth > naturalHeight  && naturalWidth > viewport.width) {
+					height = viewport.width * (naturalHeight / naturalWidth);
 					width = height * (naturalWidth / naturalHeight);
-					currentScale = innerWidth / naturalWidth;
+					currentScale = viewport.width / naturalWidth;
+				} else if (naturalWidth === naturalHeight) {
+					if (naturalWidth > viewport.width) {
+					currentScale = viewport.width / naturalWidth;
+					} else if (naturalHeight > viewport.height) {
+					currentScale = viewport.height / naturalHeight;
+					} else {
+					currentScale = 1;
+					}
+					width *= currentScale;
+					height *= currentScale;
 				}
 
 				setCanvasSize(canvas, width, height);
