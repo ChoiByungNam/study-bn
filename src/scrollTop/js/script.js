@@ -144,9 +144,9 @@
 		ripple: function () {
 			var defaults = this.defaults;
 
-			$('.' + defaults.btnTop).on('click', function (event) {
-				var positionX = event.pageX,
-					positionY = event.pageY,
+			$('.' + defaults.btnTop).on('click', function (e) {
+				var positionX = e.pageX,
+					positionY = e.pageY,
 					btnPositionX = $(this).offset().left,
 					btnPositionY = $(this).offset().top,
 					rippleNum = $(this).find('.ripple').length;
@@ -154,16 +154,22 @@
 				console.log('mouseX:' + positionX, 'btnX:' + btnPositionX, 'mouseY:' + positionY, 'btnY:' + btnPositionY);
 				$(this).append('<span class="ripple">&nbsp;</span>');
 				$('.ripple').eq(rippleNum).css({
+					'top': positionY - btnPositionY,
 					'left': positionX - btnPositionX
-				}).stop().animate({
-				},{
-					duration: 2000,
-					complete: function () {
-						$(this).remove();
-					}
 				});
+				// }).stop().animate({
+				// },{
+				// 	duration: 2000,
+				// 	complete: function () {
+				// 		$(this).remove();
+				// 	}
+				setTimeout(function () {
+					$('.ripple').eq(rippleNum).remove();
+					console.log($('.ripple').eq(rippleNum));
+				}, 2000);
+				clearTimeout();
 			});
-			return false;
+
 			/*
 				클릭하면 <span class="ripple"></span> 태그를 생성하고,
 				클릭한 마우스 좌표 값을 생성한 <span class="ripple"></span> 태그에 top, left 값으로 적용시켜준다.

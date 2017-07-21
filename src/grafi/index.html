@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+	<head>
+		<meta charset="UTF-8">
+		<title>grafi</title>
+		<style>
+			.playground {
+				position: absolute;
+				z-index: 1;
+				top: 0;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+
+			.toolbar {
+				position: fixed;
+				z-index: 2;
+				top: 0;
+				left: 0;
+				width: 100%;
+				background: rgba(0, 0, 0, .5);
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="grafi-canvas" class="playground">이 웹 브라우저가 &lt;canvas&gt;를 지원하지 않습니다.</canvas>
+		<div class="toolbar">
+			<button type="button" data-action="invert">invert</button>
+			<button type="button" data-action="bright">bright</button>
+			<button type="button" data-action="dark">dark</button>
+			<button type="button" data-action="contrast">contrast</button>
+			<button type="button" data-action="posterize">posterize</button>
+			<button type="button" data-action="solarize">solarize</button>
+			<button type="button" data-action="grayscale">grayscale</button>
+			<button type="button" data-action="threshold">threshold</button>
+			<button type="button" data-action="pseudocolor">pseudocolor</button>
+			<button type="button" data-action="blur">blur</button>
+			<button type="button" data-action="sharp">sharp</button>
+		</div>
+
+		<script type="text/javascript" src="js/grafi.js"></script>
+		<!-- <script type="text/javascript" src="js/script.js"></script> -->
+		<script type="text/javascript">
+			const canvas = document.querySelector('.playground');
+			const ctx = canvas.getContext('2d');
+
+			let currentScale = 1;
+
+			// 캔버스 크기 지정
+			function setCanvasSize(canvas, width = window.innerWidth, height = window.innerHeight) {
+				canvas.width = width;
+				canvas.height = height;
+			}
+
+			// 화면에 맞추기
+			function fit(ctx, img) {
+				const { canvas } = ctx;
+				const { innerWidth, innerHeight } = window;
+				const { naturalWidth, naturalHeight } = img;
+
+				let width = naturalWidth;
+				let height = naturalHeight;
+
+				if (naturalHeight > naturalWidth && naturalHeight > innerHeight) {
+					width = innerHeight * (naturalWidth / naturalHeight);
+					height = width * (naturalHeight / naturalWidth);
+					currentScale = innerHeight / naturalHeight;
+				} else if (naturalWidth > naturalHeight  && naturalWidth > innerWidth) {
+					height = innerWidth * (naturalHeight / naturalWidth);
+					width = height * (naturalWidth / naturalHeight);
+					currentScale = innerWidth / naturalWidth;
+				}
+
+				setCanvasSize(canvas, width, height);
+				ctx.save();
+				ctx.drawImage(img, 0, 0, width, height);
+				ctx.restore();
+			}
+
+			// 버튼 클릭 시 해당 함수 호출
+			document.addEventListener('click', e => {
+				const { target } = e;
+				const actionName = !!target.dataset && target.dataset.action;
+
+				if (typeof actionName === 'string' && typeof actions[actionName] === 'function') {
+					actions[actionName](ctx, img);
+				}
+			});
+
+			// 이미지 생성
+			function makeImage(url) {
+				return new Promise((resolve, reject) => {
+					const img = document.createElement('img');
+
+					img.onload = () => {
+						img.onload = null;
+						img.onerror = null;
+						resolve(img);
+					};
+
+					img.onerror = () => {
+						img.onload = null;
+						img.onerror = null;
+						reject('이미지를 로드할 수 없습니다.');
+					};
+
+					img.alt = '';
+					img.src = url;
+				});
+			}
+
+			// 이미지 경로
+			const imageUrl = 'img/image.jpg';
+
+			const promisedImg = makeImage(imageUrl);
+			let img;
+
+			// 이미지가 로드되면 `fit()` 호출
+			promisedImg.then(el => {
+				img = el;
+				fit(ctx, img);
+			});
+
+			// grafi library
+			let original;
+
+			function invert () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.invert(original), 0, 0);
+			}
+
+			function bright () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.brightness(original, {level:127}), 0, 0);
+			}
+
+			function dark () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.brightness(original, {level: -127}), 0, 0);
+			}
+
+			function contrast () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.contrast(original, {level: 2}), 0, 0);
+			}
+
+			function posterize () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.posterize(original, {level: 4}), 0, 0);
+			}
+
+			function solarize () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.solarize(original), 0, 0);
+			}
+
+			function grayscale () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.grayscale(original, {mode:'luma'}), 0, 0);
+			}
+
+			function threshold () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.threshold(original, {level:127}), 0, 0);
+			}
+
+			function pseudocolor () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.pseudocolor(original), 0, 0);
+			}
+
+			function blur () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.blur(original, {level: 1}), 0, 0);
+			}
+
+			function sharp () {
+				const { width, height } = canvas;
+				original = ctx.getImageData(0,0, width, height);
+
+				ctx.putImageData(grafi.sharpen(original, {level: 1}), 0, 0);
+			}
+
+			const actions = {
+				invert,
+				bright,
+				dark,
+				contrast,
+				posterize,
+				solarize,
+				grayscale,
+				threshold,
+				pseudocolor,
+				blur,
+				sharp
+			};
+
+		</script>
+	</body>
+</html>
